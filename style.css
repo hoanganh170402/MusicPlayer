@@ -1,6 +1,219 @@
+:root
+{
+    --text-color: #333;
+    --white-color: #fff;
+    --primary-color: #ec1f55;
+}
 *
 {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    box-sizing: inherit ;
+    font-family: "Roboto", sans-serif;
 }
+
+html
+{
+    box-sizing: border-box;
+    /* tương đương 10px */
+    font-size: 62.5%;
+}
+
+body
+{
+    background-color: #f5f5f5;
+}
+
+.player
+{
+    position: relative;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.dashboard
+{
+    position: fixed;
+    max-width: 480px;
+    width: 100%;
+    background-color: #fff;
+    padding: 15px 10px 16px;
+    top: 0;
+    border-bottom: 1px solid #ebebeb;
+}
+
+header
+{
+    text-align: center;
+}
+
+header h4 
+{
+    font-size: 1.4rem;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+header h2
+{
+    color: var(--text-color);
+    font-size: 1.8rem;
+    font-weight: 550;
+}
+
+.cd
+{
+    width: 200px;
+    display: flex;
+    margin: auto;
+    padding: 10px 0;
+}
+
+.cd-thumb
+{
+    /* Trong CSS, khi bạn sử dụng thuộc tính background-image để áp dụng một hình ảnh nền cho một phần tử HTML, bạn cần phải lựa chọn kích thước của phần tử đó. Nếu không có nội dung bên trong phần tử, kích thước của phần tử sẽ trở thành 0 và do đó hình ảnh nền sẽ không hiển thị. Khi bạn sử dụng padding-top: 100%, bạn đang đặt độ cao của phần tử bằng 100% của chiều rộng của nó, điều này tạo ra một hình vuông với kích thước dựa trên chiều rộng của phần tử. Điều này giúp đảm bảo rằng phần tử có một kích thước đủ để hiển thị hình ảnh nền. */
+    background-image: url(https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/ee9a3eb2-353a-4054-94b1-7bdd5ddb83fb/d5bkfr3-721c7437-3f3c-4658-94a0-5aa96b3c6b39.png/v1/fill/w_894,h_894,q_70,strp/linkin_park_vector_logo_by_darkmacsek9_d5bkfr3-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9OTAwIiwicGF0aCI6IlwvZlwvZWU5YTNlYjItMzUzYS00MDU0LTk0YjEtN2JkZDVkZGI4M2ZiXC9kNWJrZnIzLTcyMWM3NDM3LTNmM2MtNDY1OC05NGEwLTVhYTk2YjNjNmIzOS5wbmciLCJ3aWR0aCI6Ijw9OTAwIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.cIu_F4UikIkusathE6VcwIbscBcAw54Ij2Z5v650MB4);
+    width: 100%;
+    padding-top: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 50%;
+}
+
+.control
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 10px 0;
+    color: var(--text-color);
+}
+
+.btn
+{
+    font-size: 2rem;
+    color: #666;
+}
+
+.btn:hover
+{
+    cursor: pointer;
+}
+
+.btn-toggle-play
+{
+    background-color: var(--primary-color);
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    font-size: 2.5rem;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.progress
+{
+    width: 100%;
+    /* mất cái viền */
+    -webkit-appearance: none;
+    height: 6px;
+    background-color: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: 0.2s;
+    transition: opacity 0.2s;
+}
+
+.progress::-webkit-slider-thumb 
+{
+    /* cái này dùng cho con trỏ  */
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 6px;
+    background-color: var(--primary-color);
+    cursor: pointer;
+}
+
+.progress:hover::-webkit-slider-thumb
+{
+    height: 10px;
+    width: 12px;
+    transition: all 0.2s ease;
+}
+
+.icon-pause 
+{
+    display: none;
+}
+
+.player.playing .icon-pause
+{
+    display: block;
+}
+
+.player.playing .icon-play
+{
+    display: none;
+}
+
+.playlist 
+{
+    margin-top: 400px;
+    padding: 12px;
+}
+
+.song
+{
+    display: flex;
+    background-color: #fff;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 10px 18px;
+    border-radius: 6px;
+    color: var(--text-color);
+    font-size: 1.5rem;
+}
+
+.thumb 
+{
+    background-image: url(https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/ee9a3eb2-353a-4054-94b1-7bdd5ddb83fb/d5bkfr3-721c7437-3f3c-4658-94a0-5aa96b3c6b39.png/v1/fill/w_894,h_894,q_70,strp/linkin_park_vector_logo_by_darkmacsek9_d5bkfr3-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9OTAwIiwicGF0aCI6IlwvZlwvZWU5YTNlYjItMzUzYS00MDU0LTk0YjEtN2JkZDVkZGI4M2ZiXC9kNWJrZnIzLTcyMWM3NDM3LTNmM2MtNDY1OC05NGEwLTVhYTk2YjNjNmIzOS5wbmciLCJ3aWR0aCI6Ijw9OTAwIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.cIu_F4UikIkusathE6VcwIbscBcAw54Ij2Z5v650MB4);
+    width: 50px;
+    height: 50px;
+    background-size: cover;
+    border-radius: 50%;
+    margin-right: 18px;
+}
+
+.body 
+{
+    flex: 1;
+    padding: 0 16px;
+}
+
+.title
+{
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.author
+{
+    color: #999;
+    font-size: 1.4rem;
+}
+
+.option
+{
+    color: #999;
+    cursor: pointer;
+    font-size: 2rem;
+    padding-right: 8px;
+}
+
+
+
+
+
