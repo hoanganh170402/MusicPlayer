@@ -3,6 +3,7 @@
     --text-color: #333;
     --white-color: #fff;
     --primary-color: #ec1f55;
+    --link-thumb : url(https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/ee9a3eb2-353a-4054-94b1-7bdd5ddb83fb/d5bkfr3-721c7437-3f3c-4658-94a0-5aa96b3c6b39.png/v1/fill/w_894,h_894,q_70,strp/linkin_park_vector_logo_by_darkmacsek9_d5bkfr3-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9OTAwIiwicGF0aCI6IlwvZlwvZWU5YTNlYjItMzUzYS00MDU0LTk0YjEtN2JkZDVkZGI4M2ZiXC9kNWJrZnIzLTcyMWM3NDM3LTNmM2MtNDY1OC05NGEwLTVhYTk2YjNjNmIzOS5wbmciLCJ3aWR0aCI6Ijw9OTAwIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.cIu_F4UikIkusathE6VcwIbscBcAw54Ij2Z5v650MB4)
 }
 *
 {
@@ -40,6 +41,7 @@ body
     padding: 15px 10px 16px;
     top: 0;
     border-bottom: 1px solid #ebebeb;
+    border-radius: 6px;
 }
 
 header
@@ -67,12 +69,13 @@ header h2
     display: flex;
     margin: auto;
     padding: 10px 0;
+    transition: all 0.05s linear;
 }
 
 .cd-thumb
 {
     /* Trong CSS, khi bạn sử dụng thuộc tính background-image để áp dụng một hình ảnh nền cho một phần tử HTML, bạn cần phải lựa chọn kích thước của phần tử đó. Nếu không có nội dung bên trong phần tử, kích thước của phần tử sẽ trở thành 0 và do đó hình ảnh nền sẽ không hiển thị. Khi bạn sử dụng padding-top: 100%, bạn đang đặt độ cao của phần tử bằng 100% của chiều rộng của nó, điều này tạo ra một hình vuông với kích thước dựa trên chiều rộng của phần tử. Điều này giúp đảm bảo rằng phần tử có một kích thước đủ để hiển thị hình ảnh nền. */
-    background-image: url(https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/ee9a3eb2-353a-4054-94b1-7bdd5ddb83fb/d5bkfr3-721c7437-3f3c-4658-94a0-5aa96b3c6b39.png/v1/fill/w_894,h_894,q_70,strp/linkin_park_vector_logo_by_darkmacsek9_d5bkfr3-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9OTAwIiwicGF0aCI6IlwvZlwvZWU5YTNlYjItMzUzYS00MDU0LTk0YjEtN2JkZDVkZGI4M2ZiXC9kNWJrZnIzLTcyMWM3NDM3LTNmM2MtNDY1OC05NGEwLTVhYTk2YjNjNmIzOS5wbmciLCJ3aWR0aCI6Ijw9OTAwIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.cIu_F4UikIkusathE6VcwIbscBcAw54Ij2Z5v650MB4);
+    background-image: var(--link-thumb);
     width: 100%;
     padding-top: 100%;
     background-repeat: no-repeat;
@@ -93,6 +96,11 @@ header h2
 {
     font-size: 2rem;
     color: #666;
+}
+
+.btn.active
+{
+    color: var(--primary-color);
 }
 
 .btn:hover
@@ -175,11 +183,17 @@ header h2
     border-radius: 6px;
     color: var(--text-color);
     font-size: 1.5rem;
+    box-shadow: 0 0.4px 1.2px rgba(0, 0, 0, 0.3);
+}
+
+.song:hover
+{
+    transform: translateY(-2px);
+    transition: all 0.1s linear;
 }
 
 .thumb 
 {
-    background-image: url(https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/ee9a3eb2-353a-4054-94b1-7bdd5ddb83fb/d5bkfr3-721c7437-3f3c-4658-94a0-5aa96b3c6b39.png/v1/fill/w_894,h_894,q_70,strp/linkin_park_vector_logo_by_darkmacsek9_d5bkfr3-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9OTAwIiwicGF0aCI6IlwvZlwvZWU5YTNlYjItMzUzYS00MDU0LTk0YjEtN2JkZDVkZGI4M2ZiXC9kNWJrZnIzLTcyMWM3NDM3LTNmM2MtNDY1OC05NGEwLTVhYTk2YjNjNmIzOS5wbmciLCJ3aWR0aCI6Ijw9OTAwIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.cIu_F4UikIkusathE6VcwIbscBcAw54Ij2Z5v650MB4);
     width: 50px;
     height: 50px;
     background-size: cover;
