@@ -16,43 +16,52 @@ const $$ = document.querySelectorAll.bind(document)
 
 const playlist = $('.playlist')
 const cd = $('.cd')
+const heading = $('header h2')
+const cdThumb = $('.cd-thumb')
+const audio = $('#audio')
+const playBtn = $('.btn-toggle-play')
+const player = $('.player')
+const progress = $('#progress')
 
 const app = {
-    song:[
+    currentIndex: 0,
+    isPlaying:false,
+    song:
+    [
         {
             name: 'Yêu em 2 ngày',
             singer: 'Duong Domic',
-            path:'../Music/song1.mp3',
+            path:'./Assets/Music/song1.mp3',
             image: './Assets/Img/pic1.jpg'
         },
         {
             name: 'Over',
             singer: 'Khoi Vu',
-            path:'../Music/song2.mp3',
+            path:'./Assets/Music/song2.mp3',
             image: './Assets/Img/pic2.jpg'
         },
         {
             name: 'Rose',
             singer: 'The Chainsmoker',
-            path:'../Music/song3.mp3',
+            path:'./Assets/Music/song3.mp3',
             image: './Assets/Img/pic3.jpg'
         },
         {
             name: 'All we know',
             singer: 'The chainsmoker',
-            path:'../Music/song4.mp3',
+            path:'./Assets/Music/song4.mp3',
             image: './Assets/Img/pic4.jpg'
         },
         {
             name: 'Takeaway',
             singer: 'The Chainsmoker',
-            path:'../Music/song5.mp3',
+            path:'./Assets/Music/song5.mp3',
             image: './Assets/Img/pic5.jpg'
         },
         {
             name: 'Paris',
             singer: 'The chainsmoker',
-            path:'../Music/song6.mp3',
+            path:'./Assets/Music/song6.mp3',
             image: './Assets/Img/pic6.jpg'
         }
     ],
@@ -76,12 +85,25 @@ const app = {
         playlist.innerHTML = html.join('')
     },
 
+    defineProperties() 
+    {
+        Object.defineProperty(this,'currentSong', 
+        {
+            get() {
+                return this.song[this.currentIndex]
+            }
+        })
+    },
+
     // Xử lý sự kiện
-    handelEvent(){
+    handelEvent()
+    {
         // NOTE: Scroll top 
         // lấy ra chiều dài của thè cd
         const cdWidth = cd.offsetWidth
-        document.onscroll = () => {
+        const _this = this
+        document.onscroll = () => 
+        {
             // scrollTop là đang lấy giá trị của việc cuộn trang
             const scrollTop = window.scrollY || document.documentElement.scrollTop
             // Muốn thu nhỏ ảnh thumb thì lấy kích thước width của cd trừ đi giá trị cuộn trang 
@@ -90,11 +112,62 @@ const app = {
             cd.style.width = newCdWidth > 0 ? newCdWidth + 'px' : 0
             cd.style.opacity = newCdWidth / cdWidth > 0 ? newCdWidth / cdWidth : 0
         }
-            
+        
+        playBtn.onclick = () => 
+        {
+            if (_this.isPlaying)
+            {
+                audio.pause()
+            }
+            else
+            {
+                audio.play()
+            }
+        }
+
+        audio.onplay = () => 
+        {
+            _this.isPlaying = true
+            player.classList.add('playing')
+        }
+
+        audio.onpause = () => 
+        {
+            _this.isPlaying = false
+            player.classList.remove('playing')
+        }
+
+        audio.ontimeupdate = () =>
+        {
+            if(audio.duration)
+            {
+                const progressPercent = audio.currentTime / audio.duration * 100
+    
+                progress.value = progressPercent
+            }
+        }
+
+        progress.onchange = (e) => {
+            currentPercent = e.target.value
+            seekTime = currentPercent / 100 * audio.duration
+            audio.currentTime = seekTime
+        }
+
+
     },
-    start() {
-        // this ở đây cũng là app 
+    loadCurrentSong() 
+    {
+        heading.textContent = this.currentSong.name
+        cdThumb.style.backgroundImage = `url(${this.currentSong.image})`
+        audio.src = this.currentSong.path
+    },
+
+    start() 
+    {
+        // this ở đây cũng là app
+        this.defineProperties()
         this.handelEvent()
+        this.loadCurrentSong()
         this.render()
     },
 }
