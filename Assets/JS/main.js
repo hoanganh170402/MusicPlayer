@@ -1,7 +1,7 @@
 /** 
  *  Render Song - done
  *  Scroll top - done
- *  Play/ pause/ seek 
+ *  Play/ pause/ seek - done
  *  CD rotate
  *  Next / prev
  *  Random
@@ -23,11 +23,12 @@ const playBtn = $('.btn-toggle-play')
 const player = $('.player')
 const progress = $('#progress')
 
-const app = {
+const app = 
+{
+
     currentIndex: 0,
     isPlaying:false,
-    song:
-    [
+    song:[
         {
             name: 'Yêu em 2 ngày',
             singer: 'Duong Domic',
@@ -65,10 +66,12 @@ const app = {
             image: './Assets/Img/pic6.jpg'
         }
     ],
-    render() {
+    render() 
+    {
         // NOTE: Render song 
         // This ở đât là app
-        const html = this.song.map((song)=> {
+        const html = this.song.map((song)=> 
+        {
             return ` 
             <div class="song">
                     <div class="thumb" style="background-image:url('${song.image}')"></div>
@@ -87,21 +90,22 @@ const app = {
 
     defineProperties() 
     {
+        // This ở đây là app
         Object.defineProperty(this,'currentSong', 
         {
-            get() {
+            get() 
+            {
                 return this.song[this.currentIndex]
             }
         })
     },
-
     // Xử lý sự kiện
     handelEvent()
     {
         // NOTE: Scroll top 
         // lấy ra chiều dài của thè cd
-        const cdWidth = cd.offsetWidth
         const _this = this
+        const cdWidth = cd.offsetWidth
         document.onscroll = () => 
         {
             // scrollTop là đang lấy giá trị của việc cuộn trang
@@ -113,9 +117,10 @@ const app = {
             cd.style.opacity = newCdWidth / cdWidth > 0 ? newCdWidth / cdWidth : 0
         }
         
+        // Xử lý khi click play 
         playBtn.onclick = () => 
         {
-            if (_this.isPlaying)
+            if(_this.isPlaying)
             {
                 audio.pause()
             }
@@ -124,50 +129,67 @@ const app = {
                 audio.play()
             }
         }
-
-        audio.onplay = () => 
+        // Khi nhạc được phát
+        audio.onplay = () =>
         {
-            _this.isPlaying = true
+            this.isPlaying = true
             player.classList.add('playing')
         }
 
+        // Khi nhạc bị dừng 
         audio.onpause = () => 
         {
-            _this.isPlaying = false
+            this.isPlaying = false
             player.classList.remove('playing')
         }
 
-        audio.ontimeupdate = () =>
+        // Khi tiến độ bài hát thay đổi
+        audio.ontimeupdate = () => 
         {
-            if(audio.duration)
+            // Nếu không phải là NAN
+            if(audio.duration) 
             {
-                const progressPercent = audio.currentTime / audio.duration * 100
-    
+                // audio.currentTime là thời gian hiện tại
+                // audio.duration là tổng thời lượng bài hát
+                // Tính phần trăm cho progress
+                const progressPercent = audio.currentTime *100 / audio.duration 
+
+                // Thanh đổi value trong progress thành gí trị phần trăm ở trên
                 progress.value = progressPercent
             }
         }
 
-        progress.onchange = (e) => {
+        progress.onchange = (e) => 
+        {
+            // Số phần trăm muốn thay đổi
             currentPercent = e.target.value
             seekTime = currentPercent / 100 * audio.duration
+
+            // Thay đổi thời gian hiện tại thành thời gian gian tua 
             audio.currentTime = seekTime
         }
-
-
     },
-    loadCurrentSong() 
+    // Load ra bài hát đầu tiên 
+    loadCurrentSong () 
     {
         heading.textContent = this.currentSong.name
         cdThumb.style.backgroundImage = `url(${this.currentSong.image})`
         audio.src = this.currentSong.path
     },
-
     start() 
     {
-        // this ở đây cũng là app
+        // this ở đây cũng là app 
+
+        // Định nghĩa các thuộc tính của object
         this.defineProperties()
+
+        // Lắng nghe và sử lý các sự kiện
         this.handelEvent()
+
+        // Load current song
         this.loadCurrentSong()
+
+        // Render playlist
         this.render()
     },
 }
