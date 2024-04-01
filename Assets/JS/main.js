@@ -242,33 +242,19 @@ const app =
         this.loadCurrentSong()
     },
 
-
-    nextSong()
+    getCurrentSong() 
     {
-        this.currentIndex++
-        if(this.currentIndex >= this.song.length)
-        {
-            this.currentIndex = 0
-        }
-        this.loadCurrentSong()
+        return this.song[this.currentIndex]
     },
 
-    prevSong()
-    {
-        this.currentIndex--
-        if(this.currentIndex < 0)
-        {
-            this.currentIndex = this.song.length - 1
-        }
-        this.loadCurrentSong()
-    },
 
     start() 
     {
         // this ở đây cũng là app 
 
         // Định nghĩa các thuộc tính của object
-        this.defineProperties()
+        // this.defineProperties()
+        console.log(this.getCurrentSong());
 
         // Lắng nghe và sử lý các sự kiện
         this.handelEvent()
