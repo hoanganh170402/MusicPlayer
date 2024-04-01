@@ -2,8 +2,8 @@
  *  Render Song - done
  *  Scroll top - done
  *  Play/ pause/ seek - done
- *  CD rotate - done
- *  Next / prev - 
+ *  CD rotate
+ *  Next / prev
  *  Random
  *  Next / repeat when ended
  *  Active song
@@ -68,6 +68,7 @@ const app =
             image: './Assets/Img/pic6.jpg'
         }
     ],
+
     render() 
     {
         // NOTE: Render song 
@@ -101,6 +102,7 @@ const app =
             }
         })
     },
+
     // Xử lý sự kiện
     handelEvent()
     {
@@ -109,15 +111,16 @@ const app =
         const _this = this
         const cdWidth = cd.offsetWidth
 
-        const cdThumbAnimate =  cdThumb.animate([
-            {
-                'transform': 'rotate(360deg)'
-            }
+        // Xử lí CD quay / dừng
+        const cdThumbAnimate = cdThumb.animate([
+            { transform: 'rotate(360deg)'}
         ],{
-            duration:8000,
-            iterations:Infinity
+            duration:8000, // hoàn thành 1 vòng quay trong 8 giây
+            iterations: Infinity // Lặp vô hạn
         })
         cdThumbAnimate.pause()
+
+        // Phóng to thu nhỏ CD
         document.onscroll = () => 
         {
             // scrollTop là đang lấy giá trị của việc cuộn trang
@@ -173,6 +176,7 @@ const app =
             }
         }
 
+        // Xử lí khi tua bài hát
         progress.onchange = (e) => 
         {
             // Số phần trăm muốn thay đổi
@@ -181,6 +185,20 @@ const app =
 
             // Thay đổi thời gian hiện tại thành thời gian gian tua 
             audio.currentTime = seekTime
+        }
+
+        // Khi next bài hát
+        nextBtn.onclick = () =>
+        {
+            _this.nextSong()
+            audio.play()
+        }
+
+        // Khi prev bài hát
+        prevBtn.onclick = () =>
+        {
+            _this.prevSong()
+            audio.play()
         }
 
         nextBtn.onclick =() => 
@@ -203,6 +221,27 @@ const app =
         cdThumb.style.backgroundImage = `url(${this.currentSong.image})`
         audio.src = this.currentSong.path
     },
+
+    nextSong() 
+    {
+        this.currentIndex++
+        if(this.currentIndex >= this.song.length)
+        {
+            this.currentIndex = 0
+        }
+        this.loadCurrentSong()
+    },
+
+    prevSong()
+    {
+        this.currentIndex--
+        if(this.currentIndex < 0)
+        {
+            this.currentIndex = this.song.length - 1
+        }
+        this.loadCurrentSong()
+    },
+
 
     nextSong()
     {
