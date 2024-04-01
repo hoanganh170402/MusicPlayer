@@ -2,8 +2,8 @@
  *  Render Song - done
  *  Scroll top - done
  *  Play/ pause/ seek - done
- *  CD rotate
- *  Next / prev
+ *  CD rotate - done
+ *  Next / prev - 
  *  Random
  *  Next / repeat when ended
  *  Active song
@@ -22,6 +22,8 @@ const audio = $('#audio')
 const playBtn = $('.btn-toggle-play')
 const player = $('.player')
 const progress = $('#progress')
+const nextBtn = $('.btn-next')
+const prevBtn = $('.btn-prev')
 
 const app = 
 {
@@ -106,6 +108,16 @@ const app =
         // lấy ra chiều dài của thè cd
         const _this = this
         const cdWidth = cd.offsetWidth
+
+        const cdThumbAnimate =  cdThumb.animate([
+            {
+                'transform': 'rotate(360deg)'
+            }
+        ],{
+            duration:8000,
+            iterations:Infinity
+        })
+        cdThumbAnimate.pause()
         document.onscroll = () => 
         {
             // scrollTop là đang lấy giá trị của việc cuộn trang
@@ -134,6 +146,7 @@ const app =
         {
             this.isPlaying = true
             player.classList.add('playing')
+            cdThumbAnimate.play()
         }
 
         // Khi nhạc bị dừng 
@@ -141,6 +154,7 @@ const app =
         {
             this.isPlaying = false
             player.classList.remove('playing')
+            cdThumbAnimate.pause()
         }
 
         // Khi tiến độ bài hát thay đổi
@@ -168,7 +182,20 @@ const app =
             // Thay đổi thời gian hiện tại thành thời gian gian tua 
             audio.currentTime = seekTime
         }
+
+        nextBtn.onclick =() => 
+        {
+            _this.nextSong()
+            audio.play()
+        }
+
+        prevBtn.onclick = () => 
+        {
+            _this.prevSong()
+            audio.play()
+        }
     },
+
     // Load ra bài hát đầu tiên 
     loadCurrentSong () 
     {
@@ -176,6 +203,27 @@ const app =
         cdThumb.style.backgroundImage = `url(${this.currentSong.image})`
         audio.src = this.currentSong.path
     },
+
+    nextSong()
+    {
+        this.currentIndex++
+        if(this.currentIndex >= this.song.length)
+        {
+            this.currentIndex = 0
+        }
+        this.loadCurrentSong()
+    },
+
+    prevSong()
+    {
+        this.currentIndex--
+        if(this.currentIndex < 0)
+        {
+            this.currentIndex = this.song.length - 1
+        }
+        this.loadCurrentSong()
+    },
+
     start() 
     {
         // this ở đây cũng là app 
