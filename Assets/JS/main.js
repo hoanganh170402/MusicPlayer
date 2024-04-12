@@ -4,8 +4,8 @@
  *  Play/ pause/ seek - done
  *  CD rotate - done
  *  Next / prev - done
- *  Random
- *  Next / repeat when ended
+ *  Random - done
+ *  Next / repeat when ended - done
  *  Active song
  *  Scroll active song into view
  *  Play song when click
@@ -24,12 +24,16 @@ const player = $('.player')
 const progress = $('#progress')
 const nextBtn = $('.btn-next')
 const prevBtn = $('.btn-prev')
+const randomBtn = $('.btn-random')
+const repeatBtn = $('.btn-repeat')
 
 const app = 
 {
 
     currentIndex: 0,
     isPlaying:false,
+    isRandom:false,
+    isRepeat:false,
     song:[
         {
             name: 'Yêu em 2 ngày',
@@ -190,15 +194,76 @@ const app =
         // Khi next bài hát
         nextBtn.onclick = () =>
         {
-            _this.nextSong()
+            // Nếu random được trả về là true thì sẽ chạy hàm randomSong
+            if (_this.isRandom)
+            {
+                _this.randomSong()
+            }
+            // Còn trong trường hợp không có random thì vẫn nextSong như thường
+            else 
+            {
+                _this.nextSong()
+            }
             audio.play()
         }
 
         // Khi prev bài hát
         prevBtn.onclick = () =>
-        {
-            _this.prevSong()
+        {   
+            // Nếu random được trả về là true thì sẽ chạy hàm randomSong
+            if(_this.isRandom)
+            {
+                _this.randomSong()
+            }
+            // Còn trong trường hợp không có random thì vẫn prevSong như thường
+            else
+            {
+                _this.prevSong()
+            }
             audio.play()
+        }
+
+        // Xử lý khi random bài hát
+        randomBtn.onclick = () => 
+        {
+            // Nếu random trả về true
+            // if(_this.isRandom)
+            // {
+            //     randomBtn.classList.remove('active')
+            //     _this.isRandom = false
+            // }
+            // // Trường hợp random trả về false
+            // else
+            // {
+            //     randomBtn.classList.add('active')
+            //     _this.isRandom = true
+            // }
+
+            // Hoặc cách của anh Sơn 
+            // NOTE: Ngoài ra, ở tham số thứ hai của toggle, các bạn có thể thêm điều kiện kiểm tra để add/remove class. 
+            // Nếu điều kiện trả về true, class sẽ được thêm vào phần tử, nếu là false class sẽ được xóa khỏi phần tử.
+            _this.isRandom = !_this.isRandom
+            randomBtn.classList.toggle('active',_this.isRandom) 
+        }
+
+        // Xử lý khi lặp 1 bài hát
+        repeatBtn.onclick = () => 
+        {
+            _this.isRepeat = !_this.isRepeat
+            repeatBtn.classList.toggle('active',_this.isRepeat)
+        }
+
+        // Xử lý khi bài nhạc kết thúc
+        audio.onended = () => 
+        {
+            if(_this.isRepeat)
+            {
+                audio.play()
+            }
+            else
+            {
+                nextBtn.click()
+            }
         }
     },
 
@@ -230,10 +295,20 @@ const app =
         this.loadCurrentSong()
     },
 
+    randomSong()
+    {
+        let newIndex 
+        do {
+            newIndex = Math.floor(Math.random() * this.song.length)
+        }
+        while(newIndex === this.currentIndex)
+        this.currentIndex = newIndex
+        this.loadCurrentSong()
+    },
+
     start() 
     {
         // this ở đây cũng là app 
-
         // Định nghĩa các thuộc tính của object
         this.defineProperties()
 
