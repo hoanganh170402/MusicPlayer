@@ -200,18 +200,6 @@ const app =
             _this.prevSong()
             audio.play()
         }
-
-        nextBtn.onclick =() => 
-        {
-            _this.nextSong()
-            audio.play()
-        }
-
-        prevBtn.onclick = () => 
-        {
-            _this.prevSong()
-            audio.play()
-        }
     },
 
     // Load ra bài hát đầu tiên 
@@ -253,7 +241,7 @@ const app =
         // this ở đây cũng là app 
 
         // Định nghĩa các thuộc tính của object
-        // this.defineProperties()
+        this.defineProperties()
         console.log(this.getCurrentSong());
 
         // Lắng nghe và sử lý các sự kiện
