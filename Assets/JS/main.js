@@ -2,9 +2,9 @@
  *  Render Song - done
  *  Scroll top - done
  *  Play/ pause/ seek - done
- *  CD rotate
- *  Next / prev
- *  Random
+ *  CD rotate - done
+ *  Next / prev - done
+ *  Random - done
  *  Next / repeat when ended
  *  Active song
  *  Scroll active song into view
@@ -24,12 +24,16 @@ const player = $('.player')
 const progress = $('#progress')
 const nextBtn = $('.btn-next')
 const prevBtn = $('.btn-prev')
+const randomBtn = $('.btn-random')
+const repeatBtn = $('.btn-repeat')
 
 const app = 
 {
 
     currentIndex: 0,
     isPlaying:false,
+    isRandom: false,
+    isRepeat: false,
     song:[
         {
             name: 'Yêu em 2 ngày',
@@ -190,16 +194,58 @@ const app =
         // Khi next bài hát
         nextBtn.onclick = () =>
         {
-            _this.nextSong()
+            if(_this.isRandom)
+            {
+                _this.randomSong()
+            }
+            else
+            {
+                _this.nextSong()
+            }
             audio.play()
         }
 
         // Khi prev bài hát
         prevBtn.onclick = () =>
         {
-            _this.prevSong()
+            if(_this.isRandom)
+            {
+                _this.randomSong()
+            }
+            else
+            {
+                _this.prevSong()
+            }
             audio.play()
         }
+
+        // Xử lý khi random 
+        randomBtn.onclick = () =>
+        {
+            _this.isRandom = !_this.isRandom
+            randomBtn.classList.toggle('active',_this.isRandom)
+        }
+
+        // Xử lý khi repeat
+        repeatBtn.onclick = () =>
+        {
+            _this.isRepeat = !_this.isRepeat
+            repeatBtn.classList.toggle('active',_this.isRepeat)
+        }   
+
+        // Xử lý khi kết thúc bài hát
+        audio.onended = () => 
+        {
+            if(_this.isRepeat)
+            {
+                audio.play()
+            }
+            else
+            {
+                nextBtn.click()
+            }
+        }
+
     },
 
     // Load ra bài hát đầu tiên 
@@ -230,11 +276,16 @@ const app =
         this.loadCurrentSong()
     },
 
-    getCurrentSong() 
+    randomSong()
     {
-        return this.song[this.currentIndex]
+        let newIndex
+        do{
+            newIndex = Math.floor(Math.random() * this.song.length)
+        }
+        while(newIndex === this.currentIndex)
+        this.currentIndex = newIndex
+        this.loadCurrentSong()
     },
-
 
     start() 
     {
@@ -242,7 +293,6 @@ const app =
 
         // Định nghĩa các thuộc tính của object
         this.defineProperties()
-        console.log(this.getCurrentSong());
 
         // Lắng nghe và sử lý các sự kiện
         this.handelEvent()
