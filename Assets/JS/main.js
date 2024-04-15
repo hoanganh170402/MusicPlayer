@@ -79,7 +79,8 @@ const app =
         // This ở đât là app
         const html = this.song.map((song)=> 
         {
-            return ` 
+            return /* html*/
+            ` 
             <div class="song">
                     <div class="thumb" style="background-image:url('${song.image}')"></div>
                     <div class="body">
