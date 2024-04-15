@@ -5,7 +5,7 @@
  *  CD rotate - done
  *  Next / prev - done
  *  Random - done
- *  Next / repeat when ended
+ *  Next / repeat when ended - done
  *  Active song
  *  Scroll active song into view
  *  Play song when click
@@ -77,11 +77,10 @@ const app =
     {
         // NOTE: Render song 
         // This ở đât là app
-        const html = this.song.map((song)=> 
+        const html = this.song.map((song,index)=> 
         {
-            return /* html*/
-            ` 
-            <div class="song">
+            return /* html*/ ` 
+            <div class="song ${index === this.currentIndex ? 'active' : ''}">
                     <div class="thumb" style="background-image:url('${song.image}')"></div>
                     <div class="body">
                         <h3 class="title">${song.name}</h3>
@@ -204,6 +203,7 @@ const app =
                 _this.nextSong()
             }
             audio.play()
+            this.render()
         }
 
         // Khi prev bài hát
@@ -218,6 +218,7 @@ const app =
                 _this.prevSong()
             }
             audio.play()
+            this.render()
         }
 
         // Xử lý khi random 
@@ -288,6 +289,11 @@ const app =
         this.loadCurrentSong()
     },
 
+    activeSong()
+    {
+    }
+    ,
+
     start() 
     {
         // this ở đây cũng là app 
@@ -300,7 +306,7 @@ const app =
 
         // Load current song
         this.loadCurrentSong()
-
+        this.activeSong()
         // Render playlist
         this.render()
     },
