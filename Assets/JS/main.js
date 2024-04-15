@@ -6,7 +6,7 @@
  *  Next / prev - done
  *  Random - done
  *  Next / repeat when ended - done
- *  Active song
+ *  Active song - done
  *  Scroll active song into view
  *  Play song when click
  */
@@ -29,7 +29,6 @@ const repeatBtn = $('.btn-repeat')
 
 const app = 
 {
-
     currentIndex: 0,
     isPlaying:false,
     isRandom:false,
@@ -77,10 +76,10 @@ const app =
     {
         // NOTE: Render song 
         // This ở đât là app
-        const html = this.song.map((song)=> 
+        const html = this.song.map((song,index)=> 
         {
-            return ` 
-            <div class="song">
+            return /*html*/ ` 
+            <div class="song ${index == this.currentIndex ? 'active' : ""}" data-index="${index}">
                     <div class="thumb" style="background-image:url('${song.image}')"></div>
                     <div class="body">
                         <h3 class="title">${song.name}</h3>
@@ -205,6 +204,7 @@ const app =
                 _this.nextSong()
             }
             audio.play()
+            _this.render()
         }
 
         // Khi prev bài hát
@@ -221,6 +221,8 @@ const app =
                 _this.prevSong()
             }
             audio.play()
+            this.activeSong()
+            _this.render()
         }
 
         // Xử lý khi random bài hát
@@ -306,6 +308,7 @@ const app =
         this.loadCurrentSong()
     },
 
+
     start() 
     {
         // this ở đây cũng là app 
@@ -317,7 +320,6 @@ const app =
 
         // Load current song
         this.loadCurrentSong()
-
         // Render playlist
         this.render()
     },

@@ -187,10 +187,27 @@ header h2
     box-shadow: 0 0.4px 1.2px rgba(0, 0, 0, 0.3);
 }
 
+.song.active
+{
+    background-color: var(--primary-color);
+}
+
+.song.active .title,
+.song.active .author,
+.song.active .option
+{
+    color: var(--white-color);
+}
+
 .song:hover
 {
     transform: translateY(-2px);
     transition: all 0.1s linear;
+}
+
+.song:active
+{
+    opacity: 0.8;
 }
 
 .thumb 
