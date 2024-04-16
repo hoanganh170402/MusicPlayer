@@ -350,7 +350,11 @@ const app =
             if(songActive.dataset.index < 3)
             {
                 // console.log('active song is not active')
-                window.scrollTo(0,0)
+                window.scrollTo({
+                    top: 0,
+                    left: 0,
+                    behavior:'smooth'
+                })
                 songActive.scrollIntoView({
                     behavior:'smooth',
                     block:'nearest'
