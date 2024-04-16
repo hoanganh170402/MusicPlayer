@@ -6,9 +6,9 @@
  *  Next / prev - done
  *  Random - done
  *  Next / repeat when ended - done
- *  Active song
- *  Scroll active song into view
- *  Play song when click
+ *  Active song - done
+ *  Scroll active song into view - done
+ *  Play song when click - done
  */
 
 const $ = document.querySelector.bind(document)
@@ -34,7 +34,7 @@ const app =
     isPlaying:false,
     isRandom: false,
     isRepeat: false,
-    song:[
+    songs:[
         {
             name: 'Yêu em 2 ngày',
             singer: 'Duong Domic',
@@ -70,6 +70,30 @@ const app =
             singer: 'The chainsmoker',
             path:'./Assets/Music/song6.mp3',
             image: './Assets/Img/pic6.jpg'
+        },
+        {
+            name: 'Takeaway',
+            singer: 'The Chainsmoker',
+            path:'./Assets/Music/song5.mp3',
+            image: './Assets/Img/pic5.jpg'
+        },
+        {
+            name: 'Paris',
+            singer: 'The chainsmoker',
+            path:'./Assets/Music/song6.mp3',
+            image: './Assets/Img/pic6.jpg'
+        },
+        {
+            name: 'Takeaway',
+            singer: 'The Chainsmoker',
+            path:'./Assets/Music/song5.mp3',
+            image: './Assets/Img/pic5.jpg'
+        },
+        {
+            name: 'Paris',
+            singer: 'The chainsmoker',
+            path:'./Assets/Music/song6.mp3',
+            image: './Assets/Img/pic6.jpg'
         }
     ],
 
@@ -77,10 +101,10 @@ const app =
     {
         // NOTE: Render song 
         // This ở đât là app
-        const html = this.song.map((song,index)=> 
+        const html = this.songs.map((song,index)=> 
         {
             return /* html*/ ` 
-            <div class="song ${index === this.currentIndex ? 'active' : ''}">
+            <div class="song " data-index="${index}">
                     <div class="thumb" style="background-image:url('${song.image}')"></div>
                     <div class="body">
                         <h3 class="title">${song.name}</h3>
@@ -102,7 +126,7 @@ const app =
         {
             get() 
             {
-                return this.song[this.currentIndex]
+                return this.songs[this.currentIndex]
             }
         })
     },
@@ -154,6 +178,7 @@ const app =
             this.isPlaying = true
             player.classList.add('playing')
             cdThumbAnimate.play()
+            _this.activeSong()
         }
 
         // Khi nhạc bị dừng 
@@ -202,8 +227,8 @@ const app =
             {
                 _this.nextSong()
             }
+            _this.scrollToActiveSong()
             audio.play()
-            this.render()
         }
 
         // Khi prev bài hát
@@ -217,8 +242,8 @@ const app =
             {
                 _this.prevSong()
             }
+            _this.scrollToActiveSong()
             audio.play()
-            this.render()
         }
 
         // Xử lý khi random 
@@ -248,6 +273,20 @@ const app =
             }
         }
 
+        playlist.onclick = (e) => {
+            const songNode = e.target.closest('.song:not(.active)')
+            if(songNode || e.target.closest('.option'))
+            {
+                if(songNode)
+                {
+                    _this.currentIndex = Number(songNode.dataset.index)
+                    _this.loadCurrentSong()
+                    audio.play()
+                }
+                if(e.target.closest('.option'))
+                {}
+            }
+        }
     },
 
     // Load ra bài hát đầu tiên 
@@ -261,7 +300,7 @@ const app =
     nextSong() 
     {
         this.currentIndex++
-        if(this.currentIndex >= this.song.length)
+        if(this.currentIndex >= this.songs.length)
         {
             this.currentIndex = 0
         }
@@ -282,7 +321,7 @@ const app =
     {
         let newIndex
         do{
-            newIndex = Math.floor(Math.random() * this.song.length)
+            newIndex = Math.floor(Math.random() * this.songs.length)
         }
         while(newIndex === this.currentIndex)
         this.currentIndex = newIndex
@@ -291,8 +330,41 @@ const app =
 
     activeSong()
     {
-    }
-    ,
+        [...$$('.song')].map((song, index)=>{
+            song.classList.remove('active')
+            if(index === this.currentIndex)
+            {
+                song.classList.add('active')
+            }
+        })
+    },
+
+    scrollToActiveSong()
+    {
+        setTimeout(() => {
+            const songActive = $('.song.active')
+            if(songActive.dataset.index < 3)
+            {
+                window.scrollTo({
+                    top: 0,
+                    left: 0,
+                    behavior:'smooth'
+                })
+                songActive.scrollIntoView(
+                {
+                    behavior:'smooth',
+                    block:'nearest'
+                })
+            }
+            else
+            {
+                songActive.scrollIntoView({
+                    behavior:'smooth',
+                    block:'center'
+                })
+            }
+        },200);
+    },
 
     start() 
     {
