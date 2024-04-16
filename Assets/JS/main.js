@@ -26,6 +26,7 @@ const nextBtn = $('.btn-next')
 const prevBtn = $('.btn-prev')
 const randomBtn = $('.btn-random')
 const repeatBtn = $('.btn-repeat')
+const songActive = $('.song.active')
 
 const app = 
 {
@@ -33,7 +34,7 @@ const app =
     isPlaying:false,
     isRandom:false,
     isRepeat:false,
-    song:[
+    songs:[
         {
             name: 'Yêu em 2 ngày',
             singer: 'Duong Domic',
@@ -69,17 +70,18 @@ const app =
             singer: 'The chainsmoker',
             path:'./Assets/Music/song6.mp3',
             image: './Assets/Img/pic6.jpg'
-        }
+        },
     ],
 
     render() 
     {
         // NOTE: Render song 
         // This ở đât là app
-        const html = this.song.map((song,index)=> 
+        const html = this.songs.map((song,index)=> 
         {
+            // ${index == this.currentIndex ? 'active' : ""}
             return /*html*/ ` 
-            <div class="song ${index == this.currentIndex ? 'active' : ""}" data-index="${index}">
+            <div class="song " data-index="${index}">
                     <div class="thumb" style="background-image:url('${song.image}')"></div>
                     <div class="body">
                         <h3 class="title">${song.name}</h3>
@@ -101,7 +103,7 @@ const app =
         {
             get() 
             {
-                return this.song[this.currentIndex]
+                return this.songs[this.currentIndex]
             }
         })
     },
@@ -121,7 +123,10 @@ const app =
             duration:8000, // hoàn thành 1 vòng quay trong 8 giây
             iterations: Infinity // Lặp vô hạn
         })
-        cdThumbAnimate.pause()
+        cdThumbAnimate.pause(),
+
+        
+
 
         // Phóng to thu nhỏ CD
         document.onscroll = () => 
@@ -153,6 +158,8 @@ const app =
             this.isPlaying = true
             player.classList.add('playing')
             cdThumbAnimate.play()
+            this.activeSong()
+            // this.thumbRotate()
         }
 
         // Khi nhạc bị dừng 
@@ -204,7 +211,8 @@ const app =
                 _this.nextSong()
             }
             audio.play()
-            _this.render()
+            // _this.render()
+            _this.scrollToActiveSong()
         }
 
         // Khi prev bài hát
@@ -221,8 +229,9 @@ const app =
                 _this.prevSong()
             }
             audio.play()
-            this.activeSong()
-            _this.render()
+            // this.activeSong()
+            // _this.render()
+            _this.scrollToActiveSong()
         }
 
         // Xử lý khi random bài hát
@@ -267,6 +276,21 @@ const app =
                 nextBtn.click()
             }
         }
+
+        // Xử lý khi click bài hát
+        playlist.onclick = (e) => 
+        {
+            const songNode = e.target.closest('.song:not(.active)')
+            if(songNode || e.target.closest('.option'))
+            {
+                if(songNode)
+                {
+                    _this.currentIndex = Number(songNode.dataset.index)
+                    _this.loadCurrentSong()
+                    audio.play()
+                }
+            }
+        }
     },
 
     // Load ra bài hát đầu tiên 
@@ -280,7 +304,7 @@ const app =
     nextSong() 
     {
         this.currentIndex++
-        if(this.currentIndex >= this.song.length)
+        if(this.currentIndex >= this.songs.length)
         {
             this.currentIndex = 0
         }
@@ -292,7 +316,7 @@ const app =
         this.currentIndex--
         if(this.currentIndex < 0)
         {
-            this.currentIndex = this.song.length - 1
+            this.currentIndex = this.songs.length - 1
         }
         this.loadCurrentSong()
     },
@@ -301,13 +325,62 @@ const app =
     {
         let newIndex 
         do {
-            newIndex = Math.floor(Math.random() * this.song.length)
+            newIndex = Math.floor(Math.random() * this.songs.length)
         }
         while(newIndex === this.currentIndex)
         this.currentIndex = newIndex
         this.loadCurrentSong()
     },
 
+    activeSong()
+    {
+        [...$$('.song')].map((song, index) => {
+            song.classList.remove('active')
+            if(index === this.currentIndex)
+            {
+                song.classList.add('active')
+            }
+        })
+    },
+
+    scrollToActiveSong()
+    {
+        setTimeout(() => {
+            const songActive = $('.song.active')
+            if(songActive.dataset.index < 3)
+            {
+                // console.log('active song is not active')
+                window.scrollTo(0,0)
+                songActive.scrollIntoView({
+                    behavior:'smooth',
+                    block:'nearest'
+                })
+            }
+            else
+            {
+                songActive.scrollIntoView({
+                    behavior:'smooth',
+                    block:'center'
+                })
+            }
+        },300);
+    },
+
+    // thumbRotate()
+    // {
+    //     [...$$('.thumb')].map((thumb, index) => {
+    //         if(index === this.currentIndex)
+    //         {
+    //             // console.log(123)
+    //             $('.thumb').dataset.index.animate([
+    //                 { transform: 'rotate(360deg)'}
+    //             ],{
+    //                 duration:8000, // hoàn thành 1 vòng quay trong 8 giây
+    //                 iterations: Infinity // Lặp vô hạn
+    //             })
+    //         }
+    //     })
+    // },
 
     start() 
     {
@@ -317,7 +390,7 @@ const app =
 
         // Lắng nghe và sử lý các sự kiện
         this.handelEvent()
-
+        // this.activeSong()
         // Load current song
         this.loadCurrentSong()
         // Render playlist
