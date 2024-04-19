@@ -14,6 +14,8 @@
 const $ = document.querySelector.bind(document)
 const $$ = document.querySelectorAll.bind(document)
 
+const PLAYER_STORAGE_KEY = 'x.x.h.a_Player'
+
 const playlist = $('.playlist')
 const cd = $('.cd')
 const heading = $('header h2')
@@ -34,6 +36,7 @@ const app =
     isPlaying:false,
     isRandom:false,
     isRepeat:false,
+    config:JSON.parse(localStorage.getItem(PLAYER_STORAGE_KEY)) ||{},
     songs:[
         {
             name: 'Yêu em 2 ngày',
@@ -72,7 +75,17 @@ const app =
             image: './Assets/Img/pic6.jpg'
         },
     ],
-
+    setConfig:function (key, value) 
+    {
+        this.config[key] = value;
+        localStorage.setItem(PLAYER_STORAGE_KEY, JSON.stringify(this.config))
+    },
+    loadConfig: function (key, value) 
+    {
+        this.isRandom = this.config.isRandom
+        this.isRepeat = this.config.isRepeat
+        this.currentIndex = this.config.currentIndex
+    },
     render() 
     {
         // NOTE: Render song 
@@ -124,9 +137,6 @@ const app =
             iterations: Infinity // Lặp vô hạn
         })
         cdThumbAnimate.pause(),
-
-        
-
 
         // Phóng to thu nhỏ CD
         document.onscroll = () => 
@@ -187,7 +197,7 @@ const app =
         }
 
         // Xử lí khi tua bài hát
-        progress.onchange = (e) => 
+        progress.oninput = (e) => 
         {
             // Số phần trăm muốn thay đổi
             currentPercent = e.target.value
@@ -254,6 +264,7 @@ const app =
             // NOTE: Ngoài ra, ở tham số thứ hai của toggle, các bạn có thể thêm điều kiện kiểm tra để add/remove class. 
             // Nếu điều kiện trả về true, class sẽ được thêm vào phần tử, nếu là false class sẽ được xóa khỏi phần tử.
             _this.isRandom = !_this.isRandom
+            _this.setConfig('isRandom', _this.isRandom)
             randomBtn.classList.toggle('active',_this.isRandom) 
         }
 
@@ -261,6 +272,7 @@ const app =
         repeatBtn.onclick = () => 
         {
             _this.isRepeat = !_this.isRepeat
+            _this.setConfig('isRepeat', _this.isRepeat)
             repeatBtn.classList.toggle('active',_this.isRepeat)
         }
 
@@ -299,6 +311,7 @@ const app =
         heading.textContent = this.currentSong.name
         cdThumb.style.backgroundImage = `url(${this.currentSong.image})`
         audio.src = this.currentSong.path
+        this.setConfig('currentIndex',this.currentIndex)
     },
 
     nextSong() 
@@ -388,17 +401,21 @@ const app =
 
     start() 
     {
+        this.loadConfig()
         // this ở đây cũng là app 
         // Định nghĩa các thuộc tính của object
         this.defineProperties()
 
         // Lắng nghe và sử lý các sự kiện
         this.handelEvent()
-        // this.activeSong()
         // Load current song
         this.loadCurrentSong()
         // Render playlist
         this.render()
+
+        // Hiện thị trạng thái repeat & random đã lưu
+        randomBtn.classList.toggle('active',this.isRandom)
+        repeatBtn.classList.toggle('active',this.isRepeat)
     },
 }
 
