@@ -14,6 +14,8 @@
 const $ = document.querySelector.bind(document)
 const $$ = document.querySelectorAll.bind(document)
 
+const PLAYER_STORAGE_KEY = 'x.x.h.a_'
+
 const playlist = $('.playlist')
 const cd = $('.cd')
 const heading = $('header h2')
@@ -29,11 +31,22 @@ const repeatBtn = $('.btn-repeat')
 
 const app = 
 {
-
     currentIndex: 0,
     isPlaying:false,
     isRandom: false,
     isRepeat: false,
+    config:JSON.parse(localStorage.getItem(PLAYER_STORAGE_KEY)) ||{},
+    setConfig: function(key, value)
+    {
+        this.config[key] = value
+        localStorage.setItem(PLAYER_STORAGE_KEY, JSON.stringify(this.config))
+    },
+    loadConfig:function()
+    {
+        this.isRepeat = this.config.isRepeat
+        this.isRandom = this.config.isRandom
+        this.currentIndex = this.config.currentIndex
+    },
     songs:[
         {
             name: 'Yêu em 2 ngày',
@@ -206,7 +219,8 @@ const app =
         }
 
         // Xử lí khi tua bài hát
-        progress.onchange = (e) => 
+        // Thay onchange bằng oninput
+        progress.oninput = (e) => 
         {
             // Số phần trăm muốn thay đổi
             currentPercent = e.target.value
@@ -250,6 +264,7 @@ const app =
         randomBtn.onclick = () =>
         {
             _this.isRandom = !_this.isRandom
+            _this.setConfig('isRandom', _this.isRandom)
             randomBtn.classList.toggle('active',_this.isRandom)
         }
 
@@ -257,6 +272,7 @@ const app =
         repeatBtn.onclick = () =>
         {
             _this.isRepeat = !_this.isRepeat
+            _this.setConfig('isRepeat', _this.isRepeat)
             repeatBtn.classList.toggle('active',_this.isRepeat)
         }   
 
@@ -295,6 +311,7 @@ const app =
         heading.textContent = this.currentSong.name
         cdThumb.style.backgroundImage = `url(${this.currentSong.image})`
         audio.src = this.currentSong.path
+        this.setConfig('currentIndex',this.currentIndex)
     },
 
     nextSong() 
@@ -369,7 +386,7 @@ const app =
     start() 
     {
         // this ở đây cũng là app 
-
+        this.loadConfig()
         // Định nghĩa các thuộc tính của object
         this.defineProperties()
 
@@ -381,6 +398,10 @@ const app =
         this.activeSong()
         // Render playlist
         this.render()
+
+        // Hiển thị nút repeat và random sau khi F5
+        randomBtn.classList.toggle('active',this.isRandom)
+        repeatBtn.classList.toggle('active',this.isRepeat)
     },
 }
 
