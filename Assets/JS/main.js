@@ -35,18 +35,18 @@ const app =
     isPlaying:false,
     isRandom: false,
     isRepeat: false,
-    config:JSON.parse(localStorage.getItem(PLAYER_STORAGE_KEY)) ||{},
-    setConfig: function(key, value)
-    {
-        this.config[key] = value
-        localStorage.setItem(PLAYER_STORAGE_KEY, JSON.stringify(this.config))
-    },
-    loadConfig:function()
-    {
-        this.isRepeat = this.config.isRepeat
-        this.isRandom = this.config.isRandom
-        this.currentIndex = this.config.currentIndex
-    },
+    // config:JSON.parse(localStorage.getItem(PLAYER_STORAGE_KEY)) ||{},
+    // setConfig: function(key, value)
+    // {
+    //     this.config[key] = value
+    //     localStorage.setItem(PLAYER_STORAGE_KEY, JSON.stringify(this.config))
+    // },
+    // loadConfig:function()
+    // {
+    //     this.isRepeat = this.config.isRepeat
+    //     this.isRandom = this.config.isRandom
+    //     this.currentIndex = this.config.currentIndex
+    // },
     songs:[
         {
             name: 'Yêu em 2 ngày',
@@ -264,16 +264,16 @@ const app =
         randomBtn.onclick = () =>
         {
             _this.isRandom = !_this.isRandom
-            _this.setConfig('isRandom', _this.isRandom)
             randomBtn.classList.toggle('active',_this.isRandom)
+            // _this.setConfig('isRandom', _this.isRandom)
         }
 
         // Xử lý khi repeat
         repeatBtn.onclick = () =>
         {
             _this.isRepeat = !_this.isRepeat
-            _this.setConfig('isRepeat', _this.isRepeat)
             repeatBtn.classList.toggle('active',_this.isRepeat)
+            // _this.setConfig('isRepeat', _this.isRepeat)
         }   
 
         // Xử lý khi kết thúc bài hát
@@ -311,7 +311,7 @@ const app =
         heading.textContent = this.currentSong.name
         cdThumb.style.backgroundImage = `url(${this.currentSong.image})`
         audio.src = this.currentSong.path
-        this.setConfig('currentIndex',this.currentIndex)
+        // this.setConfig('currentIndex',this.currentIndex)
     },
 
     nextSong() 
@@ -386,7 +386,7 @@ const app =
     start() 
     {
         // this ở đây cũng là app 
-        this.loadConfig()
+        // this.loadConfig()
         // Định nghĩa các thuộc tính của object
         this.defineProperties()
 
